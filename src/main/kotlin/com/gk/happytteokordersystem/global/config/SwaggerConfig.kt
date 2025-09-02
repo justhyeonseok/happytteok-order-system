@@ -1,0 +1,50 @@
+package com.gk.happytteokordersystem.global.config
+
+import io.swagger.v3.oas.models.Components
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.security.SecurityRequirement
+import io.swagger.v3.oas.models.security.SecurityScheme
+import org.springdoc.core.customizers.OpenApiCustomizer
+import org.springdoc.core.models.GroupedOpenApi
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+class SwaggerConfig {
+
+    @Bean
+    fun openAPI(): OpenAPI {
+        return OpenAPI()
+            .addSecurityItem(
+                SecurityRequirement().addList("Bearer Authentication")
+            )
+            .components(
+                Components().addSecuritySchemes(
+                    "Bearer Authentication",
+                    SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("Bearer")
+                        .bearerFormat("JWT")
+                        .`in`(SecurityScheme.In.HEADER)
+                        .name("Authorization")
+                )
+            )
+    }
+    // 👉 어드민 API 그룹
+    @Bean
+    fun adminApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("Admin")
+            .pathsToMatch("/api-admin/**") // 어드민 관련 API 경로
+            .addOpenApiCustomizer(OpenApiCustomizer { openApi ->
+                openApi.info(
+                    Info()
+                        .title("Happy")
+                        .description("관리자 API")
+                        .version("0.0.1")
+                )
+            })
+            .build()
+    }
+}
