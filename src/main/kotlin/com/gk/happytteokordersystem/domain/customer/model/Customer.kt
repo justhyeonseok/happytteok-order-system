@@ -1,24 +1,36 @@
 package com.gk.happytteokordersystem.domain.customer.model
 
+import com.gk.happytteokordersystem.domain.order.model.Order
+import com.gk.happytteokordersystem.global.model.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 @Entity
 @Table(name = "customer")
+@EntityListeners(AuditingEntityListener::class)
 class Customer(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
-
     @Column(name = "name")
-    val name: String,
+    var name: String,
 
     @Column(name = "phone")
-    val phone: String,
+    var phone: String,
+): BaseTimeEntity() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0
 
-    @Column(name = "created_at")
-    val createdAt: LocalDateTime
+    @OneToMany(mappedBy = "customer")
+    val orders: MutableList<Order> = mutableListOf()
 
-    )
+
+
+//    @CreatedDate
+//    @Column(name = "created_at", updatable = false)
+//    val createdAt: LocalDateTime = LocalDateTime.now()
+//
+//    @LastModifiedDate
+//    @Column(name = "updated_at")
+//    var updatedAt: LocalDateTime = LocalDateTime.now()
+}
 
 

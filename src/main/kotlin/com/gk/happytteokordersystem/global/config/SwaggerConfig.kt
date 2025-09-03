@@ -36,7 +36,7 @@ class SwaggerConfig {
     fun adminApi(): GroupedOpenApi {
         return GroupedOpenApi.builder()
             .group("Admin")
-            .pathsToMatch("/api-admin/**") // 어드민 관련 API 경로
+            .pathsToMatch("/**") // 어드민 관련 API 경로
             .addOpenApiCustomizer(OpenApiCustomizer { openApi ->
                 openApi.info(
                     Info()

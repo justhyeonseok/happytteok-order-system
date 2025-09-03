@@ -1,4 +1,85 @@
 package com.gk.happytteokordersystem.domain.customer.service
 
-class CustomerServiceImpl {
+import com.gk.happytteokordersystem.domain.customer.dto.CustomerDetailRes
+import com.gk.happytteokordersystem.domain.customer.dto.CustomerListRes
+import com.gk.happytteokordersystem.domain.customer.dto.CustomerReq
+import com.gk.happytteokordersystem.domain.customer.model.Customer
+import com.gk.happytteokordersystem.domain.customer.repository.CustomerRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+@Transactional
+class CustomerServiceImpl(
+    private val customerRepository: CustomerRepository
+) : CustomerService {
+    override fun createCustomer(req: CustomerReq): CustomerDetailRes {
+        val customer = customerRepository.save(Customer(name = req.name, phone = req.phoneNumber))
+        return CustomerDetailRes(
+            name = customer.name,
+            phoneNumber = customer.phone,
+            createdAt = customer.createdAt,
+            updatedAt = customer.updatedAt
+        )
+    }
+
+    override fun searchCustomers(name: String?, phone: String?, pageable: Pageable): Page<CustomerListRes> {
+        val customersPage = if (!name.isNullOrBlank() || !phone.isNullOrBlank()) {
+            val searchTerm = if (!name.isNullOrBlank()) name else phone ?: ""
+            customerRepository.findByNameOrPhoneContaining(searchTerm, pageable)
+        } else {
+            customerRepository.findAll(pageable)
+        }
+        return customersPage.map {
+            CustomerListRes(
+                id = it.id,
+                name = it.name,
+                phoneNumber = it.phone
+            )
+        }
+    }
+
+    override fun getCustomersWithOrderCount(pageable: Pageable): Page<CustomerListRes> {
+        // 이 메서드는 주문 수량을 기준으로 정렬된 페이지를 반환합니다.
+        val customersPage = customerRepository.findAllByOrderByOrderCountDesc(pageable)
+        return customersPage.map {
+            CustomerListRes(
+                id = it.id,
+                name = it.name,
+                phoneNumber = it.phone
+            )
+        }
+    }
+    override fun getCustomerById(id: Long): CustomerDetailRes {
+        val customer = customerRepository.findById(id)
+            .orElseThrow { NoSuchElementException("Customer with id $id not found") }
+        return CustomerDetailRes(
+            name = customer.name,
+            phoneNumber = customer.phone,
+            createdAt = customer.createdAt,
+            updatedAt = customer.updatedAt
+        )
+    }
+
+    override fun updateCustomer(id: Long, req: CustomerReq): CustomerDetailRes {
+        val customer = customerRepository.findById(id)
+            .orElseThrow { NoSuchElementException("Customer with id $id not found") }
+
+        customer.name = req.name
+        customer.phone = req.phoneNumber
+
+        val updatedCustomer = customerRepository.save(customer)
+        return CustomerDetailRes(
+            name = updatedCustomer.name,
+            phoneNumber = updatedCustomer.phone,
+            createdAt = updatedCustomer.createdAt,
+            updatedAt = updatedCustomer.updatedAt
+        )
+    }
+
+    override fun deleteCustomer(id: Long) {
+        customerRepository.deleteById(id)
+    }
 }

@@ -16,9 +16,10 @@ class Order(
     @Column(name = "order_uid", unique = true, nullable = false)
     val orderUid: String,
 
+    // customer_id가 null을 허용하도록 `nullable = true`로 설정
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    val customer: Customer?,
+    @JoinColumn(name = "customer_id", nullable = true)
+    var customer: Customer?, // customer 필드도 nullable로 변경
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val orderTable: MutableList<OrderTable>,
