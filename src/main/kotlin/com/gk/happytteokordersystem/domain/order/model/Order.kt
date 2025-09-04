@@ -25,10 +25,10 @@ class Order(
     val orderTable: MutableList<OrderTable>,
 
     @Column(name = "total_price", nullable = false)
-    val totalPrice: BigDecimal,
+    var totalPrice: BigDecimal,
 
     @Column(name = "pickup_date", nullable = false)
-    val pickupDate: LocalDateTime,
+    var pickupDate: LocalDateTime,
 
     @Column(name = "is_paid", nullable = false)
     var isPaid: Boolean = false,
@@ -41,4 +41,5 @@ class Order(
 
     @Column(name = "order_date", nullable = false)
     val orderDate: OffsetDateTime = OffsetDateTime.now()
+
 )
