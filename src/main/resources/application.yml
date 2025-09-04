@@ -5,6 +5,11 @@ springdoc:
     filter: false
     operations-sorter: method
 spring:
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
   datasource:
     url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
@@ -18,3 +23,4 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+
