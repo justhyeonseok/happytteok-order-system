@@ -4,5 +4,6 @@ data class CustomerListRes(
     val id: Long,
     val name: String,
     val phoneNumber: String,
-    val orderCount: Long = 0
+    val orderCount: Long = 0,
+    val memo: String?
 )

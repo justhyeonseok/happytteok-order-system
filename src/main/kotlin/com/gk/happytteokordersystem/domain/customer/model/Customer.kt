@@ -14,6 +14,9 @@ class Customer(
 
     @Column(name = "phone")
     var phone: String,
+
+    @Column(name = "memo")
+    var memo: String?
 ): BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,5 +6,6 @@ data class CustomerDetailRes (
     val name: String,
     val phoneNumber: String,
     val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime? // 추가
+    val updatedAt: LocalDateTime?,
+    val memo: String?,
 )

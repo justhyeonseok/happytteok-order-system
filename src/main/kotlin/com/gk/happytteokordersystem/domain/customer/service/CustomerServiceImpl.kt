@@ -16,12 +16,13 @@ class CustomerServiceImpl(
     private val customerRepository: CustomerRepository
 ) : CustomerService {
     override fun createCustomer(req: CustomerReq): CustomerDetailRes {
-        val customer = customerRepository.save(Customer(name = req.name, phone = req.phoneNumber))
+        val customer = customerRepository.save(Customer(name = req.name, phone = req.phoneNumber, memo = req.memo))
         return CustomerDetailRes(
             name = customer.name,
             phoneNumber = customer.phone,
             createdAt = customer.createdAt,
-            updatedAt = customer.updatedAt
+            updatedAt = customer.updatedAt,
+            memo = customer.memo
         )
     }
 
@@ -36,7 +37,8 @@ class CustomerServiceImpl(
             CustomerListRes(
                 id = it.id,
                 name = it.name,
-                phoneNumber = it.phone
+                phoneNumber = it.phone,
+                memo = it.memo
             )
         }
     }
@@ -48,7 +50,8 @@ class CustomerServiceImpl(
             CustomerListRes(
                 id = it.id,
                 name = it.name,
-                phoneNumber = it.phone
+                phoneNumber = it.phone,
+                memo = it.memo
             )
         }
     }
@@ -59,7 +62,8 @@ class CustomerServiceImpl(
             name = customer.name,
             phoneNumber = customer.phone,
             createdAt = customer.createdAt,
-            updatedAt = customer.updatedAt
+            updatedAt = customer.updatedAt,
+            memo = customer.memo
         )
     }
 
@@ -75,7 +79,8 @@ class CustomerServiceImpl(
             name = updatedCustomer.name,
             phoneNumber = updatedCustomer.phone,
             createdAt = updatedCustomer.createdAt,
-            updatedAt = updatedCustomer.updatedAt
+            updatedAt = updatedCustomer.updatedAt,
+            memo = updatedCustomer.memo
         )
     }
 

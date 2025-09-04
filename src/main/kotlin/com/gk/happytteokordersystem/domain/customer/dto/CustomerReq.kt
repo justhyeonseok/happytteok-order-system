@@ -2,5 +2,6 @@ package com.gk.happytteokordersystem.domain.customer.dto
 
 data class CustomerReq (
     val name: String,
-    val phoneNumber: String
+    val phoneNumber: String,
+    val memo: String?
 )
