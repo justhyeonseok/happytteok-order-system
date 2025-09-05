@@ -5,8 +5,11 @@ import com.gk.happytteokordersystem.domain.customer.dto.CustomerListRes
 import com.gk.happytteokordersystem.domain.customer.dto.CustomerReq
 import com.gk.happytteokordersystem.domain.customer.model.Customer
 import com.gk.happytteokordersystem.domain.customer.repository.CustomerRepository
+import com.gk.happytteokordersystem.global.exception.exceptions.ExistModelException
+import com.gk.happytteokordersystem.global.exception.exceptions.ModelNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,6 +19,12 @@ class CustomerServiceImpl(
     private val customerRepository: CustomerRepository
 ) : CustomerService {
     override fun createCustomer(req: CustomerReq): CustomerDetailRes {
+        // 해당 전화번호에 값이 있는경우 에러
+        val getCustomer = customerRepository.findByPhone(req.phoneNumber)
+        if (getCustomer != null) {
+            throw ExistModelException(req.phoneNumber)
+        }
+
         val customer = customerRepository.save(Customer(name = req.name, phone = req.phoneNumber, memo = req.memo))
         return CustomerDetailRes(
             name = customer.name,
@@ -57,7 +66,7 @@ class CustomerServiceImpl(
     }
     override fun getCustomerById(id: Long): CustomerDetailRes {
         val customer = customerRepository.findById(id)
-            .orElseThrow { NoSuchElementException("Customer with id $id not found") }
+            .orElseThrow { ModelNotFoundException(id.toString()) }
         return CustomerDetailRes(
             name = customer.name,
             phoneNumber = customer.phone,
@@ -69,9 +78,12 @@ class CustomerServiceImpl(
 
     override fun updateCustomer(id: Long, req: CustomerReq): CustomerDetailRes {
         val customer = customerRepository.findById(id)
-            .orElseThrow { NoSuchElementException("Customer with id $id not found") }
+            .orElseThrow { ModelNotFoundException(id.toString()) }
 
         customer.name = req.name
+        if(customerRepository.findByPhone(req.phoneNumber) != null) {
+            throw ExistModelException(req.phoneNumber)
+        }
         customer.phone = req.phoneNumber
 
         val updatedCustomer = customerRepository.save(customer)
@@ -85,6 +97,7 @@ class CustomerServiceImpl(
     }
 
     override fun deleteCustomer(id: Long) {
+        customerRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(id.toString())
         customerRepository.deleteById(id)
     }
 }

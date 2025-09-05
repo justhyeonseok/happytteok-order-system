@@ -21,4 +21,6 @@ interface CustomerRepository : JpaRepository<Customer, Long> {
 
     // 모든 고객을 페이징하여 조회
     override fun findAll(pageable: Pageable): Page<Customer>
+
+    fun findByPhone(phone: String): Customer?
 }
