@@ -8,7 +8,7 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "orders")
-class Order(
+data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -30,16 +30,22 @@ class Order(
     @Column(name = "pickup_date", nullable = false)
     var pickupDate: LocalDateTime,
 
+    // 결제 상태
     @Column(name = "is_paid", nullable = false)
     var isPaid: Boolean = false,
 
+    // 쌀 여부
     @Column(name = "has_rice", nullable = false)
     var hasRice: Boolean = false,
 
+    // 픽업 상태
     @Column(name = "is_picked_up", nullable = false)
     var isPickedUp: Boolean = false,
 
     @Column(name = "order_date", nullable = false)
-    val orderDate: OffsetDateTime = OffsetDateTime.now()
+    val orderDate: OffsetDateTime = OffsetDateTime.now(),
+
+    @Column(name = "memo")
+    var memo: String
 
 )

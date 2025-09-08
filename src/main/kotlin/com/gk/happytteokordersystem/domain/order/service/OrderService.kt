@@ -13,4 +13,7 @@ interface OrderService {
     fun getOrdersByCustomer(customerId: Long, pageable: Pageable): Page<OrderRes>
     fun getAllOrders(pageable: Pageable): Page<OrderListRes>
     fun deleteOrders(ids: List<Long>)
+    fun paidStatus(id: Long)
+    fun pickUpStatus(id: Long)
+    fun riceStatus(id: Long)
 }

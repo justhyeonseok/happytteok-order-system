@@ -65,4 +65,19 @@ class OrderController(private val orderService: OrderService) {
         orderService.deleteOrders(ids)
         return ResponseEntity.noContent().build()
     }
+    @PatchMapping("/{orderId}/pads")
+    @Operation(summary = "결제 상태 변경")
+    fun paidStatus(@PathVariable orderId: Long) {
+        orderService.paidStatus(orderId)
+    }
+    @PatchMapping("/{orderId}/picks")
+    @Operation(summary = "픽업 상태 변경")
+    fun pickUpStatus(@PathVariable orderId: Long) {
+        orderService.pickUpStatus(orderId)
+    }
+    @PatchMapping("/{orderId}/rices")
+    @Operation(summary = "쌀 지참 상태 변경")
+    fun riceStatus(@PathVariable orderId: Long) {
+        orderService.riceStatus(orderId)
+    }
 }

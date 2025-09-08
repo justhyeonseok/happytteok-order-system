@@ -9,7 +9,8 @@ data class OrderRes(
     val orderUid: String,
     val orderTables: List<OrderTableRes>,
     val totalPrice: BigDecimal,
-    val createdAt: OffsetDateTime
+    val createdAt: OffsetDateTime,
+    val memo: String
 ) {
     companion object {
         fun from(order: Order): OrderRes {
@@ -18,7 +19,8 @@ data class OrderRes(
                 orderUid = order.orderUid,
                 orderTables = order.orderTable.map { OrderTableRes.from(it) },
                 totalPrice = order.totalPrice,
-                createdAt = order.orderDate
+                createdAt = order.orderDate,
+                memo = order.memo
             )
         }
     }

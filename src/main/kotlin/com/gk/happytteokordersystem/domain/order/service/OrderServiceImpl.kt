@@ -26,7 +26,7 @@ class OrderServiceImpl(
     private val productTypeRepository: ProductTypeRepository
 ) : OrderService {
 
-    @Transactional
+
     override fun createOrder(requestDto: OrderCreateReq): OrderRes {
         val customer = customerRepository.findByIdOrNull(requestDto.customerId)
             ?: throw ModelNotFoundException(requestDto.customerId.toString())
@@ -54,7 +54,8 @@ class OrderServiceImpl(
             isPaid = requestDto.isPaid,
             hasRice = requestDto.hasRice,
             isPickedUp = requestDto.isPickedUp,
-            orderDate = OffsetDateTime.now()
+            orderDate = OffsetDateTime.now(),
+            memo = requestDto.memo
         )
 
         // orderTable에 order를 연결
@@ -67,22 +68,22 @@ class OrderServiceImpl(
     @Transactional(readOnly = true)
     override fun getOrderDetails(orderId: Long): OrderRes {
         val order = orderRepository.findByIdOrNull(orderId)
-            ?: throw NoSuchElementException("Order with id $orderId not found")
+            ?: throw ModelNotFoundException(orderId.toString())
         return OrderRes.from(order)
     }
 
-    @Transactional
+
     override fun updateOrder(orderId: Long, requestDto: OrderCreateReq): OrderRes {
         val order = orderRepository.findByIdOrNull(orderId)
-            ?: throw NoSuchElementException("Order with id $orderId not found")
+            ?: throw ModelNotFoundException(orderId.toString())
         val customer = customerRepository.findByIdOrNull(requestDto.customerId)
-            ?: throw NoSuchElementException("Customer with id ${requestDto.customerId} not found")
+            ?: throw ModelNotFoundException(requestDto.customerId.toString())
 
         // 기존 orderTable 데이터 삭제 후 새로운 데이터로 업데이트
         order.orderTable.clear()
         val updatedOrderTables = requestDto.orderTables.map {
             val riceCakeType = productTypeRepository.findByIdOrNull(it.productId)
-                ?: throw NoSuchElementException("RiceCakeType with id ${it.productId} not found")
+                ?: throw ModelNotFoundException(it.productId.toString())
             OrderTable(
                 id = 0,
                 quantity = it.quantity,
@@ -97,7 +98,11 @@ class OrderServiceImpl(
         order.isPaid = requestDto.isPaid
         order.hasRice = requestDto.hasRice
         order.isPickedUp = requestDto.isPickedUp
-        order.totalPrice = updatedOrderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+
+        val calculatedPrice = updatedOrderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+        val finalPrice = requestDto.finalPrice ?: calculatedPrice
+        order.totalPrice = finalPrice
+        order.memo = requestDto.memo
 
         val updatedOrder = orderRepository.save(order)
         return OrderRes.from(updatedOrder)
@@ -111,21 +116,39 @@ class OrderServiceImpl(
     @Transactional(readOnly = true)
     override fun getAllOrders(pageable: Pageable): Page<OrderListRes> {
         return orderRepository.findAll(pageable)
-            .map { OrderListRes.from(it) } // 👈 변경된 DTO 적용
+            .map { OrderListRes.from(it) }
     }
 
-    @Transactional
+
     override fun deleteOrders(ids: List<Long>) {
         val ordersToDelete = orderRepository.findAllByIdIn(ids)
         if (ordersToDelete.size != ids.size) {
             val foundIds = ordersToDelete.map { it.id }.toSet()
             val notFoundIds = ids.filter { it !in foundIds }
-            throw NoSuchElementException("Orders with ids $notFoundIds not found")
+            throw ModelNotFoundException(notFoundIds.toString())
         }
         orderRepository.deleteAll(ordersToDelete)
     }
 
     private fun generateOrderUid(): String {
         return "ORD-${UUID.randomUUID().toString().substring(0, 8)}"
+    }
+
+    override fun paidStatus(id: Long) {
+        val order = orderRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(id.toString())
+        val updateOrder=  order.copy(isPaid = !order.isPaid)
+        orderRepository.save(updateOrder)
+    }
+
+    override fun pickUpStatus(id: Long) {
+        val order = orderRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(id.toString())
+        val updateOrder=  order.copy(isPickedUp = !order.isPickedUp)
+        orderRepository.save(updateOrder)
+    }
+
+    override fun riceStatus(id: Long) {
+        val order = orderRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(id.toString())
+        val updateOrder=  order.copy(hasRice = !order.hasRice)
+        orderRepository.save(updateOrder)
     }
 }
