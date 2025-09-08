@@ -8,6 +8,7 @@ import com.gk.happytteokordersystem.domain.order.model.Order
 import com.gk.happytteokordersystem.domain.order.model.OrderTable
 import com.gk.happytteokordersystem.domain.order.repository.OrderRepository
 import com.gk.happytteokordersystem.domain.order.repository.ProductTypeRepository
+import com.gk.happytteokordersystem.global.exception.exceptions.ModelNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -28,11 +29,11 @@ class OrderServiceImpl(
     @Transactional
     override fun createOrder(requestDto: OrderCreateReq): OrderRes {
         val customer = customerRepository.findByIdOrNull(requestDto.customerId)
-            ?: throw NoSuchElementException("Customer with id ${requestDto.customerId} not found")
+            ?: throw ModelNotFoundException(requestDto.customerId.toString())
 
         val orderTables = requestDto.orderTables.map {
             val productType = productTypeRepository.findByIdOrNull(it.productId)
-                ?: throw NoSuchElementException("product with id ${it.productId} not found")
+                ?: throw ModelNotFoundException(it.productId.toString())
             OrderTable(
                 id = 0,
                 quantity = it.quantity,
@@ -40,13 +41,15 @@ class OrderServiceImpl(
             )
         }.toMutableList()
 
-        val totalPrice = orderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+        val calculatedPrice = orderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+        val finalPrice = requestDto.finalPrice ?: calculatedPrice
+
         val newOrder = Order(
             id = 0,
             orderUid = generateOrderUid(),
             customer = customer,
             orderTable = orderTables,
-            totalPrice = totalPrice,
+            totalPrice = finalPrice,
             pickupDate = requestDto.pickupDate,
             isPaid = requestDto.isPaid,
             hasRice = requestDto.hasRice,
