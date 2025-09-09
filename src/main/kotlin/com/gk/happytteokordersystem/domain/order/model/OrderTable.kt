@@ -13,8 +13,8 @@ class OrderTable (
     @Column(name = "quantity")
     val quantity: Int,
 
-    @JoinColumn
-    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_type_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     val productType: ProductType
 
     ) {
