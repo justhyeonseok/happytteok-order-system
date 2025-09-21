@@ -2,6 +2,7 @@ package com.gk.happytteokordersystem.domain.order.dto
 
 import com.gk.happytteokordersystem.domain.order.model.Order
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 data class OrderRes(
@@ -10,7 +11,8 @@ data class OrderRes(
     val orderTables: List<OrderTableRes>,
     val totalPrice: BigDecimal,
     val createdAt: OffsetDateTime,
-    val memo: String
+    val memo: String,
+    val pickupDate: LocalDateTime,
 ) {
     companion object {
         fun from(order: Order): OrderRes {
@@ -20,7 +22,8 @@ data class OrderRes(
                 orderTables = order.orderTable.map { OrderTableRes.from(it) },
                 totalPrice = order.totalPrice,
                 createdAt = order.orderDate,
-                memo = order.memo
+                memo = order.memo,
+                pickupDate = order.pickupDate
             )
         }
     }

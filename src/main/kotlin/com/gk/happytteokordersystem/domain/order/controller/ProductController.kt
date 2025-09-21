@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @Tag(name = "품목 관리")
-@RequestMapping("api-vi")
+@RequestMapping("/api-v1")
 class ProductController(
     private val productService: ProductService // 서비스 이름 변경
 ) {

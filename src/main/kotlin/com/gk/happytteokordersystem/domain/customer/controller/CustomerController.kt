@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @Tag(name = "고객 관리")
-@RequestMapping("/api-vi")
+@RequestMapping("/api-v1")
 class CustomerController(private val customerService: CustomerService) {
     @PostMapping("/customers")
     @Operation(summary = "고객 생성")

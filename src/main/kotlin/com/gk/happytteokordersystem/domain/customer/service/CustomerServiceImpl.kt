@@ -31,7 +31,8 @@ class CustomerServiceImpl(
             phoneNumber = customer.phone,
             createdAt = customer.createdAt,
             updatedAt = customer.updatedAt,
-            memo = customer.memo
+            memo = customer.memo,
+            id = customer.id
         )
     }
 
@@ -72,7 +73,8 @@ class CustomerServiceImpl(
             phoneNumber = customer.phone,
             createdAt = customer.createdAt,
             updatedAt = customer.updatedAt,
-            memo = customer.memo
+            memo = customer.memo,
+            id = customer.id
         )
     }
 
@@ -92,7 +94,8 @@ class CustomerServiceImpl(
             phoneNumber = updatedCustomer.phone,
             createdAt = updatedCustomer.createdAt,
             updatedAt = updatedCustomer.updatedAt,
-            memo = updatedCustomer.memo
+            memo = updatedCustomer.memo,
+            id = customer.id
         )
     }
 

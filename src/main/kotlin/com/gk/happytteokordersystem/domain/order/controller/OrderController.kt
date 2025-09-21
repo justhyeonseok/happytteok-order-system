@@ -65,7 +65,7 @@ class OrderController(private val orderService: OrderService) {
         orderService.deleteOrders(ids)
         return ResponseEntity.noContent().build()
     }
-    @PatchMapping("/{orderId}/pads")
+    @PatchMapping("/{orderId}/payments")
     @Operation(summary = "결제 상태 변경")
     fun paidStatus(@PathVariable orderId: Long) {
         orderService.paidStatus(orderId)
