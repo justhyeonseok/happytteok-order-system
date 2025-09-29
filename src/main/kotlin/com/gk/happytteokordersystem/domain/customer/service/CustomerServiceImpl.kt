@@ -83,10 +83,16 @@ class CustomerServiceImpl(
             .orElseThrow { ModelNotFoundException(id.toString()) }
 
         customer.name = req.name
-        if(customerRepository.findByPhone(req.phoneNumber) != null) {
-            throw ExistModelException(req.phoneNumber)
+        
+        // 전화번호가 변경된 경우에만 중복 검사
+        if (customer.phone != req.phoneNumber) {
+            val existingCustomer = customerRepository.findByPhone(req.phoneNumber)
+            if (existingCustomer != null && existingCustomer.id != id) {
+                throw ExistModelException(req.phoneNumber)
+            }
         }
         customer.phone = req.phoneNumber
+        customer.memo = req.memo
 
         val updatedCustomer = customerRepository.save(customer)
         return CustomerDetailRes(
