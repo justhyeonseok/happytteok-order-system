@@ -8,16 +8,20 @@ data class OrderTableRes(
     val quantity: Int,
     val productName: String,
     val productPrice: BigDecimal,
-    val productUnit: String
+    val productUnit: String,
+    val hasRice: Boolean?
 ) {
     companion object {
         fun from(orderTable: OrderTable): OrderTableRes {
+            val unit = orderTable.unit ?: "kg"
+            val unitPrice = orderTable.productType.getPriceForUnit(unit) ?: BigDecimal.ZERO
             return OrderTableRes(
                 id = orderTable.id,
                 quantity = orderTable.quantity,
                 productName = orderTable.productType.name,
-                productPrice = orderTable.productType.price,
-                productUnit = orderTable.productType.unit
+                productPrice = unitPrice,
+                productUnit = unit,
+                hasRice = orderTable.hasRice
             )
         }
     }

@@ -31,7 +31,7 @@ data class OrderListRes(
                     OrderProductDto(
                         productName = it.productType.name,
                         quantity = it.quantity,
-                        unit = it.productType.unit
+                        unit = it.unit ?: "kg"
                     )
                 }
             )

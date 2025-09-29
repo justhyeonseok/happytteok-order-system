@@ -6,8 +6,11 @@ import java.math.BigDecimal
 data class ProductRes(
     val id: Long,
     val name: String,
-    val price: BigDecimal,
-    val unit: String,
+    val pricePerKg: BigDecimal?,
+    val pricePerDoe: BigDecimal?,
+    val pricePerMal: BigDecimal?,
+    val pricePerPiece: BigDecimal?,
+    val pricePerPack: BigDecimal?,
     val isActive: Boolean
 ) {
     companion object {
@@ -15,8 +18,11 @@ data class ProductRes(
             return ProductRes(
                 id = productType.id,
                 name = productType.name,
-                price = productType.price,
-                unit = productType.unit,
+                pricePerKg = productType.pricePerKg,
+                pricePerDoe = productType.pricePerDoe,
+                pricePerMal = productType.pricePerMal,
+                pricePerPiece = productType.pricePerPiece,
+                pricePerPack = productType.pricePerPack,
                 isActive = productType.isActive
             )
         }

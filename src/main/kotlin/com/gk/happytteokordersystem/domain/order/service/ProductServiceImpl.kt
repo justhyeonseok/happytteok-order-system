@@ -20,8 +20,11 @@ class ProductServiceImpl(
         val newProductType = ProductType(
             id = 0,
             name = request.name,
-            price = BigDecimal(request.price),
-            unit = request.unit,
+            pricePerKg = request.pricePerKg,
+            pricePerDoe = request.pricePerDoe,
+            pricePerMal = request.pricePerMal,
+            pricePerPiece = request.pricePerPiece,
+            pricePerPack = request.pricePerPack,
             isActive = true
         )
         val savedProductType = productTypeRepository.save(newProductType)
@@ -38,8 +41,11 @@ class ProductServiceImpl(
 
         val updatedProduct = product.copy(
             name = request.name,
-            price = BigDecimal(request.price),
-            unit = request.unit
+            pricePerKg = request.pricePerKg,
+            pricePerDoe = request.pricePerDoe,
+            pricePerMal = request.pricePerMal,
+            pricePerPiece = request.pricePerPiece,
+            pricePerPack = request.pricePerPack
         )
         val savedProduct = productTypeRepository.save(updatedProduct)
         return ProductRes.from(savedProduct)

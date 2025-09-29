@@ -37,11 +37,16 @@ class OrderServiceImpl(
             OrderTable(
                 id = 0,
                 quantity = it.quantity,
+                unit = it.unit,
+                hasRice = it.hasRice,
                 productType = productType
             )
         }.toMutableList()
 
-        val calculatedPrice = orderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+        val calculatedPrice = orderTables.sumOf { 
+            val unitPrice = it.productType.getPriceForUnit(it.unit) ?: BigDecimal.ZERO
+            unitPrice.multiply(BigDecimal(it.quantity)) 
+        }
         val finalPrice = requestDto.finalPrice ?: calculatedPrice
 
         val newOrder = Order(
@@ -87,6 +92,8 @@ class OrderServiceImpl(
             OrderTable(
                 id = 0,
                 quantity = it.quantity,
+                unit = it.unit,
+                hasRice = it.hasRice,
                 productType = riceCakeType,
             )
         }.toMutableList()
@@ -99,7 +106,10 @@ class OrderServiceImpl(
         order.hasRice = requestDto.hasRice
         order.isPickedUp = requestDto.isPickedUp
 
-        val calculatedPrice = updatedOrderTables.sumOf { it.productType.price.multiply(BigDecimal(it.quantity)) }
+        val calculatedPrice = updatedOrderTables.sumOf { 
+            val unitPrice = it.productType.getPriceForUnit(it.unit) ?: BigDecimal.ZERO
+            unitPrice.multiply(BigDecimal(it.quantity)) 
+        }
         val finalPrice = requestDto.finalPrice ?: calculatedPrice
         order.totalPrice = finalPrice
         order.memo = requestDto.memo

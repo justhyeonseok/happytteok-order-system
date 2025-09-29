@@ -9,9 +9,14 @@ class OrderTable (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-
     @Column(name = "quantity")
     val quantity: Int,
+
+    @Column(name = "unit")
+    val unit: String,
+
+    @Column(name = "has_rice")
+    val hasRice: Boolean?,
 
     @JoinColumn(name = "product_type_id")
     @ManyToOne(fetch = FetchType.LAZY)
