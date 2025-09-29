@@ -19,16 +19,16 @@ spring:
       max-lifetime: 1800000 # 30 minutes
       connection-timeout: 30000 # 30 seconds
       leak-detection-threshold: 30000 # 30 seconds
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
 
