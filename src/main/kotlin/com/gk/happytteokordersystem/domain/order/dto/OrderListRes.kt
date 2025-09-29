@@ -31,7 +31,8 @@ data class OrderListRes(
                     OrderProductDto(
                         productName = it.productType.name,
                         quantity = it.quantity,
-                        unit = it.unit ?: "kg"
+                        unit = it.unit ?: "kg",
+                        hasRice = it.hasRice
                     )
                 }
             )
