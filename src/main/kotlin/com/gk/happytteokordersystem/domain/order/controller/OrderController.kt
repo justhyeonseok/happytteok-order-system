@@ -3,6 +3,7 @@ package com.gk.happytteokordersystem.domain.order.controller
 import com.gk.happytteokordersystem.domain.order.dto.OrderCreateReq
 import com.gk.happytteokordersystem.domain.order.dto.OrderListRes
 import com.gk.happytteokordersystem.domain.order.dto.OrderRes
+import com.gk.happytteokordersystem.domain.order.dto.OrderUpdateReq
 import com.gk.happytteokordersystem.domain.order.service.OrderService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -44,7 +45,7 @@ class OrderController(private val orderService: OrderService) {
 
     @PutMapping("/{orderId}")
     @Operation(summary = "주문서 수정")
-    fun updateOrder(@PathVariable orderId: Long, @RequestBody requestDto: OrderCreateReq): ResponseEntity<OrderRes> {
+    fun updateOrder(@PathVariable orderId: Long, @RequestBody requestDto: OrderUpdateReq): ResponseEntity<OrderRes> {
         val response = orderService.updateOrder(orderId, requestDto)
         return ResponseEntity.ok(response)
     }

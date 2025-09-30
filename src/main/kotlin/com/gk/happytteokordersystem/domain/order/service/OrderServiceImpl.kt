@@ -4,6 +4,7 @@ import com.gk.happytteokordersystem.domain.customer.repository.CustomerRepositor
 import com.gk.happytteokordersystem.domain.order.dto.OrderCreateReq
 import com.gk.happytteokordersystem.domain.order.dto.OrderListRes
 import com.gk.happytteokordersystem.domain.order.dto.OrderRes
+import com.gk.happytteokordersystem.domain.order.dto.OrderUpdateReq
 import com.gk.happytteokordersystem.domain.order.model.Order
 import com.gk.happytteokordersystem.domain.order.model.OrderTable
 import com.gk.happytteokordersystem.domain.order.repository.OrderRepository
@@ -78,11 +79,10 @@ class OrderServiceImpl(
     }
 
 
-    override fun updateOrder(orderId: Long, requestDto: OrderCreateReq): OrderRes {
+    override fun updateOrder(orderId: Long, requestDto: OrderUpdateReq): OrderRes {
         val order = orderRepository.findByIdOrNull(orderId)
             ?: throw ModelNotFoundException(orderId.toString())
-        val customer = customerRepository.findByIdOrNull(requestDto.customerId)
-            ?: throw ModelNotFoundException(requestDto.customerId.toString())
+
 
         // 기존 orderTable 데이터 삭제 후 새로운 데이터로 업데이트
         order.orderTable.clear()
@@ -95,12 +95,11 @@ class OrderServiceImpl(
                 unit = it.unit,
                 hasRice = it.hasRice,
                 productType = riceCakeType,
+                order = order
             )
         }.toMutableList()
 
         order.orderTable.addAll(updatedOrderTables)
-
-        order.customer = customer
         order.pickupDate = requestDto.pickupDate
         order.isPaid = requestDto.isPaid
         order.hasRice = requestDto.hasRice

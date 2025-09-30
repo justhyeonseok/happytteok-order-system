@@ -20,11 +20,10 @@ class OrderTable (
 
     @JoinColumn(name = "product_type_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    val productType: ProductType
+    val productType: ProductType,
 
-    ) {
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     @ManyToOne(fetch = FetchType.LAZY)
     var order: Order? = null
 
-}
+    )

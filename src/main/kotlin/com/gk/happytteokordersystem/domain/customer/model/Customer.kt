@@ -22,7 +22,7 @@ class Customer(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = [CascadeType.ALL], orphanRemoval = true)
     val orders: MutableList<Order> = mutableListOf()
 
 
