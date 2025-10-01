@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOrigins("https://happydduck-e565b.web.app",
-                "https://happydduck-e565b.firebaseapp.com",
+            .allowedOrigins("https://happy-tteok.web.app",
+                "https://happy-tteok.firebaseapp.com",
                 "http://localhost:5173") // 프론트 주소
             .allowedMethods("*")
             .allowedHeaders("*")
