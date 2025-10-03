@@ -11,5 +11,6 @@ data class OrderCreateReq(
     val isPaid: Boolean = false,
     val hasRice: Boolean = false,
     val isPickedUp: Boolean = false,
-    val finalPrice: BigDecimal? = null
+    val finalPrice: BigDecimal? = null,
+    val isAllDay: Boolean = false // 하루종일 옵션
 )

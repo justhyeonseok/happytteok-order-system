@@ -60,6 +60,7 @@ class OrderServiceImpl(
             isPaid = requestDto.isPaid,
             hasRice = requestDto.hasRice,
             isPickedUp = requestDto.isPickedUp,
+            isAllDay = requestDto.isAllDay,
             orderDate = OffsetDateTime.now(),
             memo = requestDto.memo
         )
@@ -83,6 +84,10 @@ class OrderServiceImpl(
         val order = orderRepository.findByIdOrNull(orderId)
             ?: throw ModelNotFoundException(orderId.toString())
 
+        // 고객 정보 업데이트 (중요!)
+        val customer = customerRepository.findByIdOrNull(requestDto.customerId)
+            ?: throw ModelNotFoundException(requestDto.customerId.toString())
+        order.customer = customer
 
         // 기존 orderTable 데이터 삭제 후 새로운 데이터로 업데이트
         order.orderTable.clear()
@@ -104,12 +109,18 @@ class OrderServiceImpl(
         order.isPaid = requestDto.isPaid
         order.hasRice = requestDto.hasRice
         order.isPickedUp = requestDto.isPickedUp
+        order.isAllDay = requestDto.isAllDay // 하루종일 옵션 업데이트
 
-        val calculatedPrice = updatedOrderTables.sumOf { 
-            val unitPrice = it.productType.getPriceForUnit(it.unit) ?: BigDecimal.ZERO
-            unitPrice.multiply(BigDecimal(it.quantity)) 
+        // 사용자가 직접 입력한 금액을 우선 사용, 없으면 자동 계산
+        val finalPrice = if (requestDto.finalPrice != null && requestDto.finalPrice > BigDecimal.ZERO) {
+            requestDto.finalPrice // 사용자가 입력한 금액 사용
+        } else {
+            // 자동 계산된 금액 사용
+            updatedOrderTables.sumOf { 
+                val unitPrice = it.productType.getPriceForUnit(it.unit) ?: BigDecimal.ZERO
+                unitPrice.multiply(BigDecimal(it.quantity)) 
+            }
         }
-        val finalPrice = requestDto.finalPrice ?: calculatedPrice
         order.totalPrice = finalPrice
         order.memo = requestDto.memo
 

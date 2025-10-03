@@ -16,7 +16,8 @@ data class OrderRes(
     val pickupDate: LocalDateTime,
     val isPaid: Boolean,
     val hasRice: Boolean,
-    val isPickedUp: Boolean
+    val isPickedUp: Boolean,
+    val isAllDay: Boolean
 ) {
     companion object {
         fun from(order: Order): OrderRes {
@@ -31,7 +32,8 @@ data class OrderRes(
                 pickupDate = order.pickupDate,
                 isPaid = order.isPaid,
                 hasRice = order.hasRice,
-                isPickedUp = order.isPickedUp
+                isPickedUp = order.isPickedUp,
+                isAllDay = order.isAllDay
             )
         }
     }
