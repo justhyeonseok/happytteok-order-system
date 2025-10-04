@@ -13,6 +13,8 @@ data class OrderListRes(
     val hasRice: Boolean,
     val isPaid: Boolean,
     val isPickedUp: Boolean,
+    val isAllDay: Boolean,
+    val memo: String?,
     val products: List<OrderProductDto>
 
 ) {
@@ -27,6 +29,8 @@ data class OrderListRes(
                 hasRice = order.hasRice,
                 isPaid = order.isPaid,
                 isPickedUp = order.isPickedUp,
+                isAllDay = order.isAllDay,
+                memo = order.memo,
                 products = order.orderTable.map {
                     OrderProductDto(
                         productName = it.productType.name,
