@@ -9,6 +9,7 @@ data class OrderRes(
     val orderId: Long,
     val orderUid: String,
     val customerId: Long?, // 추가된 필드
+    val customerName: String?, // 고객명 추가
     val orderTables: List<OrderTableRes>,
     val totalPrice: BigDecimal,
     val createdAt: OffsetDateTime,
@@ -25,6 +26,7 @@ data class OrderRes(
                 orderId = order.id,
                 orderUid = order.orderUid,
                 customerId = order.customer?.id, // 고객 ID 포함
+                customerName = order.customer?.name, // 고객명 포함
                 orderTables = order.orderTable.map { OrderTableRes.from(it) },
                 totalPrice = order.totalPrice,
                 createdAt = order.orderDate,
