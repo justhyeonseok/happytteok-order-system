@@ -13,19 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
+    - name: Deploy to Cloud Run
+      uses: google-github-actions/deploy-cloudrun@v2
       with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: happy-tteok
-        
-    - name: Configure Docker
-      run: gcloud auth configure-docker
-      
-    - name: Build and deploy to Cloud Run
-      run: |
-        gcloud run deploy happytteok-order-system \
-          --source . \
-          --platform managed \
-          --region asia-northeast3 \
-          --allow-unauthenticated
+        service: happytteok-order-system
+        region: asia-northeast3
+        source: .
+        flags: '--allow-unauthenticated'
