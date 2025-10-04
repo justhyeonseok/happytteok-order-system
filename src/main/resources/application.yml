@@ -30,7 +30,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate  # Flyway를 사용하므로 validate로 변경
   
   # Flyway 마이그레이션 안전 설정 (추가됨)
   flyway:
