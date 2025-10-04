@@ -22,7 +22,7 @@ data class OrderListRes(
         fun from(order: Order): OrderListRes {
             return OrderListRes(
                 orderId = order.id,
-                customerName = order.customer!!.name,
+                customerName = order.customer?.name ?: "정보 없음",
                 orderDate = order.orderDate,
                 orderUid = order.orderUid,
                 pickupDate = order.pickupDate,
