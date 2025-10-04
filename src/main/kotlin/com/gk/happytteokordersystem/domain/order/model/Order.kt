@@ -43,8 +43,8 @@ data class Order(
     var isPickedUp: Boolean = false,
 
     // 하루종일 옵션
-    @Column(name = "is_all_day", nullable = false)
-    var isAllDay: Boolean = false,
+    @Column(name = "is_all_day", nullable = true)
+    var isAllDay: Boolean? = false,
 
     @Column(name = "order_date", nullable = false)
     val orderDate: OffsetDateTime = OffsetDateTime.now(),

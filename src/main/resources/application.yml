@@ -30,11 +30,11 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate  # Flyway 사용으로 validate로 변경
+      ddl-auto: none  # DDL 자동 실행 완전 비활성화
   
-  # Flyway 마이그레이션 안전 설정 (데이터 초기화용 다시 활성화)
+  # Flyway 마이그레이션 안전 설정 (임시 비활성화)
   flyway:
-    enabled: true  # 데이터 초기화를 위해 다시 활성화
+    enabled: false  # 마이그레이션 문제로 임시 비활성화
     baseline-on-migrate: true
     clean-disabled: true  # 데이터 삭제 방지!
     fail-on-missing-locations: false
