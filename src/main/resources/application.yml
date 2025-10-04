@@ -1,12 +1,38 @@
-# 원래 설정으로 복원 (데이터베이스 연결 복구)
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: /api-docs
+    filter: false
+    operations-sorter: method
 spring:
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
   datasource:
-    url: ${DATABASE_URL}
+    hikari:
+      pool-name: MyHikariCP
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 600000  # 10 minutes
+      max-lifetime: 1800000 # 30 minutes
+      connection-timeout: 30000 # 30 seconds
+      leak-detection-threshold: 30000 # 30 seconds
+    url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
   
-  # Flyway 마이그레이션 안전 설정
+  # Flyway 마이그레이션 안전 설정 (추가됨)
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -14,7 +40,7 @@ spring:
     fail-on-missing-locations: false
     validate-on-migrate: true
 
-# 로깅 레벨 향상 (디버깅용)
+# 로깅 레벨 향상 (디버깅용 - 추가됨)
 logging:
   level:
     org.flywaydb: DEBUG
