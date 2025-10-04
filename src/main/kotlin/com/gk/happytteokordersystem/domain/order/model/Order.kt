@@ -50,6 +50,6 @@ data class Order(
     val orderDate: OffsetDateTime = OffsetDateTime.now(),
 
     @Column(name = "memo")
-    var memo: String
+    var memo: String?
 
 )
