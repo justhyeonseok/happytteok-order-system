@@ -13,7 +13,7 @@ data class OrderListRes(
     val hasRice: Boolean,
     val isPaid: Boolean,
     val isPickedUp: Boolean,
-    val isAllDay: Boolean,
+    val isAllDay: Boolean?,
     val memo: String?,
     val products: List<OrderProductDto>
 

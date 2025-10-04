@@ -17,7 +17,7 @@ data class OrderRes(
     val isPaid: Boolean,
     val hasRice: Boolean,
     val isPickedUp: Boolean,
-    val isAllDay: Boolean
+    val isAllDay: Boolean?
 ) {
     companion object {
         fun from(order: Order): OrderRes {
