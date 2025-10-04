@@ -1,21 +1,21 @@
-# 강제 마이그레이션 실행을 위한 설정
+# 원래 설정으로 복원 (데이터베이스 연결 복구)
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:h2:mem:testdb}
-    driver-class-name: org.h2.Driver
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   
-  # Flyway 마이그레이션 강제 실행 설정
+  # Flyway 마이그레이션 안전 설정
   flyway:
     enabled: true
     baseline-on-migrate: true
-    clean-disabled: false
+    clean-disabled: true  # 데이터 삭제 방지!
     fail-on-missing-locations: false
-    # 마이그레이션 강제 확인
     validate-on-migrate: true
 
 # 로깅 레벨 향상 (디버깅용)
 logging:
   level:
     org.flywaydb: DEBUG
-    org.springframework.web: DEBUG
     com.gk.happytteokordersystem: DEBUG
