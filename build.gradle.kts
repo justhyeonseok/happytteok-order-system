@@ -43,6 +43,10 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
+    
+    // Flyway 데이터베이스 마이그레이션
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
 }
 
 kotlin {
