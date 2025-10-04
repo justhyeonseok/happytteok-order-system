@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class OrderUpdateReq(
     val customerId: Long, // 고객 ID 추가
-    val memo: String,
+    val memo: String?,
     val orderTables: List<OrderTableReq>,
     val pickupDate: LocalDateTime,
     val isPaid: Boolean = false,

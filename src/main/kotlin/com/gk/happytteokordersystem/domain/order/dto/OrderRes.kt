@@ -12,7 +12,7 @@ data class OrderRes(
     val orderTables: List<OrderTableRes>,
     val totalPrice: BigDecimal,
     val createdAt: OffsetDateTime,
-    val memo: String,
+    val memo: String?,
     val pickupDate: LocalDateTime,
     val isPaid: Boolean,
     val hasRice: Boolean,
